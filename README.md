@@ -1,2 +1,10 @@
 # To-Do-Manager
-To-Do app using Spring Boot and Thymeleaf
+
+Spring Boot
+PostgreSql
+Thymeleaf
+Bootstrap
+Spring Security
+Spring Data JPA
+Maven
+IntelliJ for IDE
