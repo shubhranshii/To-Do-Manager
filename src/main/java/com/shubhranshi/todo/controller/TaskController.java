@@ -21,7 +21,7 @@ public class TaskController {
     }
 
     @GetMapping("/addTask")
-    public String addNewEmployee(Model model) {
+    public String addNewTask(Model model) {
         Task task= new Task();
         model.addAttribute("task", task);
         return "newTask";

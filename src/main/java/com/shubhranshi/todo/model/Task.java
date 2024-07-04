@@ -17,16 +17,18 @@ public class Task {
     String priority;
     LocalDateTime dueDate;
     boolean completed;
+    @Column(updatable = false)
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().withNano(0);
+        this.updatedAt = LocalDateTime.now().withNano(0);
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now().withNano(0);
     }
 }
