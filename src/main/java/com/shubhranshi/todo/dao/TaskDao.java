@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TaskDao extends JpaRepository<Task, Integer> {
 
@@ -14,4 +16,7 @@ public interface TaskDao extends JpaRepository<Task, Integer> {
     @Modifying
     @Query("UPDATE Task t SET t.completed = true WHERE t.id = :id")
     void markComplete(int id);
+
+    @Query("SELECT t FROM Task t WHERE t.user.userId = :userId")
+    List<Task> findAllByUserId(int userId);
 }

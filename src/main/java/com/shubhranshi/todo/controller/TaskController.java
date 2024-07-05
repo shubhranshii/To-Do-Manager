@@ -16,7 +16,7 @@ public class TaskController {
 
     @GetMapping("home")
     public String viewHomePage(Model model) {
-        model.addAttribute("allTasksList", taskService.getAllTasks());
+        model.addAttribute("allTasksList", taskService.getAllTasksForCurrentUser());
         return "index";
     }
 

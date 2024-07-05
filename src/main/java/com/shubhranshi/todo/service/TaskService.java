@@ -1,13 +1,15 @@
 package com.shubhranshi.todo.service;
 
 import com.shubhranshi.todo.dao.TaskDao;
+import com.shubhranshi.todo.dao.UserDao;
 import com.shubhranshi.todo.model.Task;
+import com.shubhranshi.todo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,17 +18,24 @@ public class TaskService {
     @Autowired
     private TaskDao taskDao;
 
+    @Autowired
+    private UserDao userDao;
+
     public void saveTask(Task task) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username=userDetails.getUsername();
+        User current= userDao.findByUsername(username);
+        task.setUser(current);
         taskDao.save(task);
     }
 
-    public List<Task> getAllTasks() {
-        try {
-            return taskDao.findAll();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
+    public List<Task> getAllTasksForCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username=userDetails.getUsername();
+        User current= userDao.findByUsername(username);
+        return taskDao.findAllByUserId(current.getUserId());
     }
 
     public Task getById(int id) {
