@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class TaskController {
@@ -15,8 +18,16 @@ public class TaskController {
     TaskService taskService;
 
     @GetMapping("home")
-    public String viewHomePage(Model model) {
-        model.addAttribute("allTasksList", taskService.getAllTasksForCurrentUser());
+    public String viewHomePage(@RequestParam(name = "field", required = false) String field, Model model) {
+        if (field != null && !field.isEmpty()) {
+            model.addAttribute("allTasksList", taskService.getAllTasksWithSortingForCurrentUser(field));
+        } else {
+            model.addAttribute("allTasksList", taskService.getAllTasksForCurrentUser());
+        }
+
+        List<String> sortingFields = Arrays.asList("title", "priority","dueDate","completed","createdAt");
+        model.addAttribute("sortingFields", sortingFields);
+        model.addAttribute("selectedField", field);
         return "index";
     }
 

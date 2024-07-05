@@ -5,6 +5,9 @@ import com.shubhranshi.todo.dao.UserDao;
 import com.shubhranshi.todo.model.Task;
 import com.shubhranshi.todo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +39,14 @@ public class TaskService {
         String username=userDetails.getUsername();
         User current= userDao.findByUsername(username);
         return taskDao.findAllByUserId(current.getUserId());
+    }
+
+    public List<Task> getAllTasksWithSortingForCurrentUser(String field) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username=userDetails.getUsername();
+        User current= userDao.findByUsername(username);
+        return taskDao.findAllByUserId(current.getUserId(), Sort.by(Sort.Direction.ASC,field));
     }
 
     public Task getById(int id) {

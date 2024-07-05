@@ -14,6 +14,7 @@
     <div class="d-flex justify-content-between mb-3">
         <h3 class="text-center">Tasks List</h3>
         <div>
+            <text>Dark Mode</text>
             <label class="switch">
                 <input type="checkbox" id="theme-toggle">
                 <span class="slider round"></span>
@@ -22,7 +23,18 @@
     </div>
     <div class="d-flex justify-content-between mb-3">
         <a th:href="@{/addTask}" class="btn btn-primary btn-sm">Add Task</a>
+        <form th:action="@{/home}" method="get">
+            <label for="sortField">Sort by:</label>
+            <select id="sortField" name="field" onchange="this.form.submit()">
+                <option th:each="sortField : ${sortingFields}"
+                        th:value="${sortField}"
+                        th:text="${sortField}"
+                        th:selected="${sortField == field}"></option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Sort</button>
+        </form>
     </div>
+
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark">
         <tr>
